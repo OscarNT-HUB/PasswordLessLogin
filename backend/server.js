@@ -15,6 +15,7 @@ const DB_PATH = path.join(__dirname, 'users.json');
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
 
 function loadUsers() {
   if (!fs.existsSync(DB_PATH)) return [];
@@ -125,6 +126,10 @@ app.post('/api/login', async (req, res) => {
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
+});
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.listen(PORT, () => {
