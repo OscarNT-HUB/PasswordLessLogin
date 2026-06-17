@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
 
-    private static final String BASE_URL = "https://referred-millions-blah-drives.trycloudflare.com/";
+    private static final String BASE_URL = "https://passwordless-login-vc59.onrender.com/";
     private static Retrofit retrofit;
 
     public static Retrofit getInstance() {
