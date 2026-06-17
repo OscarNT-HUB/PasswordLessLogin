@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const nodemailer = require('nodemailer');
+const sgMail = require('@sendgrid/mail');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
@@ -42,16 +42,10 @@ function generatePassword(length = 8) {
   return password.split('').sort(() => Math.random() - 0.5).join('');
 }
 
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_APP_PASSWORD,
-  },
-});
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 async function sendPasswordEmail(toEmail, name, password) {
-  const mailOptions = {
+  const msg = {
     from: `"Auto Password Generator" <${process.env.GMAIL_USER}>`,
     to: toEmail,
     subject: 'Tu contraseña generada - Auto Password Login',
@@ -69,7 +63,7 @@ async function sendPasswordEmail(toEmail, name, password) {
       </div>
     `,
   };
-  await transporter.sendMail(mailOptions);
+  await sgMail.send(msg);
 }
 
 app.post('/api/register', async (req, res) => {
